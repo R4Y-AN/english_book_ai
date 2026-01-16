@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EngAI</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        overflow: hidden;
+        background: #f7f7f8;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .top-notice {
+        position: sticky;
+        top: 0;
+        background: #f7f7f8;
+        padding: 10px;
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+        z-index: 10;
+    }
+
+    #chatContainer {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message {
+        max-width: 70%;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        word-wrap: break-word;
+    }
+
+    .user {
+        background: #d1e7ff;
+        align-self: flex-end;
+    }
+
+    .ai {
+        background: #e5e5ea;
+        align-self: flex-start;
+    }
+
+    .divider {
+        height: 1px;
+        background: #ccc;
+        width: 100%;
+    }
+
+    .input-area {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        padding: 10px;
+        background: #ffffff;
+        align-items: center;
+    }
+
+    .input-area input {
+        flex: 1;
+        padding: 10px 12px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .input-area button {
+        margin-left: 10px;
+        padding: 10px 16px;
+        border-radius: 50%;
+        border: none;
+        background: #0d6efd;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .input-area button:hover {
+        background: #0b5ed7;
+    }
+
+    .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+        padding: 6px 0 8px;
+        background: #ffffff;
+    }
+    .scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scroll-container {
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
+    }
+</style>
+</head>
+
+<body>
+
+<div class="top-notice">
+    ⚠️This is the demo version of the project, so for now it may give some wrong answers.
+</div>
+
+<div id="chatContainer"></div>
+
+<div class="divider"></div>
+
+<div class="input-area">
+    <input type="text" id="questionInput" placeholder="Ask your question from our English for today text book">
+    <button onclick="sendQuestion()">➤</button>
+</div>
+
+<div class="footer">
+    Developed with ❤️ by Rayan
+</div>
+
+<script>
+  const chatContainer = document.getElementById("chatContainer");
+  const questionInput = document.getElementById("questionInput");
+
+  window.onload = () => {
+    const savedChats = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    savedChats.forEach(msg => {
+      addMessage(msg.text, msg.sender, false);
+    });
+  };
+
+  function saveMessage(text, sender){
+    const history = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    history.push({ text, sender });
+    localStorage.setItem("chatHistory", JSON.stringify(history));
+  }
+
+  function addMessage(text, sender, save = true){
+    const msg = document.createElement("div");
+    msg.className = "message " + sender;
+    msg.innerText = text;
+    chatContainer.appendChild(msg);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    if(save) saveMessage(text, sender);
+  }
+
+  async function sendQuestion(){
+    const question = questionInput.value.trim();
+    if(!question) return;
+
+    addMessage(question, "user");
+    questionInput.value = "";
+
+    const loadingMsg = document.createElement("div");
+    loadingMsg.className = "message ai";
+    loadingMsg.innerText = "AI is typing...";
+    chatContainer.appendChild(loadingMsg);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    try {
+      const response = await fetch("https://english-book-ai.onrender.com/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+
+      const data = await response.json();
+      const answer = data.answer || "Not in textbook.";
+
+      loadingMsg.innerText = answer;
+      saveMessage(answer, "ai");
+
+    } catch(err){
+      console.error(err);
+      loadingMsg.innerText = "Error: Could not get answer.";
+      saveMessage("Error: Could not get answer.", "ai");
+    }
+  }
+
+  questionInput.addEventListener("keypress", function(e){
+    if(e.key === "Enter") sendQuestion();
+  });
+</script>
+
+
+</body>
+</html>
