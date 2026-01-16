@@ -15,7 +15,6 @@
 
     body {
         height: 100vh;
-        overflow: hidden;
         background: #f7f7f8;
         display: flex;
         flex-direction: column;
@@ -99,11 +98,13 @@
     }
 
     .footer {
+        position: sticky;
         text-align: center;
         font-size: 12px;
         color: #666;
         padding: 6px 0 8px;
         background: #ffffff;
+        bottom: 0;
     }
     .scroll-container::-webkit-scrollbar {
         display: none;
@@ -134,6 +135,7 @@
 <div class="footer">
     Developed with ❤️ by Rayan
 </div>
+
 
 <script>
   const chatContainer = document.getElementById("chatContainer");
@@ -171,7 +173,7 @@
 
     const loadingMsg = document.createElement("div");
     loadingMsg.className = "message ai";
-    loadingMsg.innerText = "Generating answer...";
+    loadingMsg.innerText = "AI is typing...";
     chatContainer.appendChild(loadingMsg);
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
@@ -203,4 +205,3 @@
 
 </body>
 </html>
-
