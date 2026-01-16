@@ -28,7 +28,7 @@ async function sendToDiscord(content) {
 }
 
 const TEXT_FILE = path.join(__dirname, "dataset.txt");
-const CONTEXT_LINES = 3;
+const CONTEXT_LINES = 10;
 
 const STOPWORDS = new Set([
   "the","is","are","was","were","what","which","who","whom",
@@ -157,5 +157,6 @@ app.post("/ask", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Textbook AI server running on http://localhost:${PORT}`);
 });
+
 
 
