@@ -93,9 +93,10 @@ async function generateAnswer(question, paragraphs) {
 const prompt = `
 You are an AI tutor. Answer the question using ONLY the information in the text below. You can use your own words to make the answer clear and accurate.
 If the answer is not present, respond exactly with "Not in textbook."
-if the question is something like greetings or friendly words answer it in a friendly way.
+If the question is something like greetings or friendly words answer it in a friendly way.
+If the question is something like asking about who made u or who is the owner of u something like that or about application then simply answer "Not in textbook.".
 Provide a clear and concise answer in 3-4 sentences. Do not write anything else other than the answer.
-If the question requires only a 1-line answer, give just 1 line without unnecessary details.
+If the question requires only a 1-word answer, give just give 1 word answer without unnecessary details.
 Textbook Content:
 ${context}
 
@@ -156,4 +157,5 @@ app.post("/ask", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Textbook AI server running on http://localhost:${PORT}`);
 });
+
 
