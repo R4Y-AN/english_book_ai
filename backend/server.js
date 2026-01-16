@@ -35,7 +35,7 @@ const STOPWORDS = new Set([
   "a","an","of","to","in","on","for","with","and","or",
   "does","do","did","how","why","when","explain","define",
   "tell","about","write","should","think","where", "on", "above", "why", "here", "explain", "mean", "meaning", 
-  "know", "known", "can", "cannot", "could", "couldn't"
+  "know", "known", "can", "cannot", "could", "couldn't", "old", "age", "time", "cant", "answer"
 ]);
 
 const lines = fs.readFileSync(TEXT_FILE, "utf-8")
@@ -157,6 +157,7 @@ app.post("/ask", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Textbook AI server running on http://localhost:${PORT}`);
 });
+
 
 
 
