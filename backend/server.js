@@ -111,7 +111,7 @@ ${question}
       "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`
     },
     body: JSON.stringify({
-      model: "xiaomi/mimo-v2-flash:free",
+      model: "allenai/molmo-2-8b:free",
       messages: [
         { role: "system", content: "You answer strictly from textbook content." },
         { role: "user", content: prompt }
@@ -157,6 +157,7 @@ app.post("/ask", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Textbook AI server running on http://localhost:${PORT}`);
 });
+
 
 
 
